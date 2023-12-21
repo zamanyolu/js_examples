@@ -1,114 +1,73 @@
-/*
-https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Tutorials/CycleTracker/JavaScript_functionality#validate_user_input
- */
+const newPeriodFormEl = document.getElementsByTagName("form")[0];
+const startDateInputEl = document.getElementById("start-date");
+const endDateInputEl = document.getElementById("end-date");
+const pastPeriodContainer = document.getElementById("past-periods");
 
-const newPeriodFormEl = document.getElementsByName("form")[0;
-const startDateInputEl = document.getElementById("start-date")
-const endDateInputEl = document.getElementById("end-date")
+// Add the storage key as an app-wide constant
+const STORAGE_KEY = "period-tracker";
 
-// listen to form submission
-newPeriodFormEl.addEventListener("submit", (event) =>{
-    evetn.preventDefault();
-
-    // get the start and end dates from the form
+// Listen to form submissions.
+newPeriodFormEl.addEventListener("submit", (event) => {
+    event.preventDefault();
     const startDate = startDateInputEl.value;
     const endDate = endDateInputEl.value;
-
-    // check if the dates are invalid
-    if (checkDatesInvald(startDate, endDate)){
-        // if dates are invalid, exit.
+    if (checkDatesInvalid(startDate, endDate)) {
         return;
     }
-
-    // store the new period in our client-side storage.
     storeNewPeriod(startDate, endDate);
-
-    // refresh the UI
     renderPastPeriods();
-
-    // reset the form.
     newPeriodFormEl.reset();
 });
 
-function checkDatesInvalid(startDate, endDate){
-    // check start date is after end date, and neither is null.
-    if(!startDate || !endDate || startDate > endDate){
-        // To make the validation robust we could:
-        // 1. add error messaging based on error type
-        // 2. Alert assistive technology users about the error
-        // 3. move focus to the error location
-        // instead, for now, we clear the dates if either
-        // or both are invalid
+function checkDatesInvalid(startDate, endDate) {
+    if (!startDate || !endDate || startDate > endDate) {
         newPeriodFormEl.reset();
-
-        // as dates are invalid, return true.
         return true;
     }
-
-    // else
     return false;
 }
 
-const STORAGE_KEY = "period-tracker";
-
-function storeNewPeriod(startDate, endDate){
-    // get ddata from storage.
+function storeNewPeriod(startDate, endDate) {
     const periods = getAllStoredPeriods();
-
-    // add new period object to the end of the array of periods.
-    periods.push({startDate, endDate});
-
-    //sort array so that periods are ordered by start date, from newest ot oldest
-    periods.sort((a,b)=>{
+    periods.push({ startDate, endDate });
+    periods.sort((a, b) => {
         return new Date(b.startDate) - new Date(a.startDate);
     });
-
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(periods));
 }
 
-function getAllStoredPeriods(){
-    // get the string of periods data from localStorage
+function getAllStoredPeriods() {
     const data = window.localStorage.getItem(STORAGE_KEY);
-
-    // if no periods were stored, default to en ampty array
-    // otherwise, return stored data as parsed JSON
-    const periods = data ? JSON.parse(data): [];
-
+    const periods = data ? JSON.parse(data) : [];
+    console.dir(periods);
+    console.log(periods);
     return periods;
 }
 
-const pasPeriodContainer = document.getElementById("past-periods");
-
-function renderPastPeriods(){
+function renderPastPeriods() {
+    const pastPeriodHeader = document.createElement("h2");
+    const pastPeriodList = document.createElement("ul");
     const periods = getAllStoredPeriods();
-
-    //exit if there no periods
-    if(periods.length ===0){
+    if (periods.length === 0) {
         return;
     }
-    //clear the list of past periods to re-render it
-    pasPeriodContainer.innerHTML = "";
-
-    const pastPeriodHeader = document.createElement("h2");
-    pastPeriodHeader.textContent ="Past periods";
-
-    const pastPeriodLilst = document.createElement("ul");
-
-    periods.forEach((period) =>{
+    pastPeriodContainer.innerHTML = "";
+    pastPeriodHeader.textContent = "Past periods";
+    periods.forEach((period) => {
         const periodEl = document.createElement("li");
-        periodEl.textContent = `From ${formatDate(period.startDate,
-            )} to ${formatDate(period.endDate)}`;
-        pastPeriodLilst.appendChild(periodEl);
+        periodEl.textContent = `From ${formatDate(
+            period.startDate,
+        )} to ${formatDate(period.endDate)}`;
+        pastPeriodList.appendChild(periodEl);
     });
 
-    pasPeriodContainer.appendChild(pastPeriodHeader);
-    pasPeriodContainer.appendChild(pastPeriodLilst);
+    pastPeriodContainer.appendChild(pastPeriodHeader);
+    pastPeriodContainer.appendChild(pastPeriodList);
 }
 
-function formatDate(dateString){
+function formatDate(dateString) {
     const date = new Date(dateString);
-
-    return date.toLocaleDateString("en-US",{timeZone: "UTC"});
+    return date.toLocaleDateString("en-US", { timeZone: "UTC" });
 }
 
 renderPastPeriods();

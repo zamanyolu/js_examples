@@ -6,7 +6,7 @@
     "theme_color": "#eeffee",
     "background_color": "#eeffee",
     "display": "standalone",
-    "form_factor": "single",
+    "form_factor": "wide",
   "icons": [
     {
       "src": "icons/circle.ico",
