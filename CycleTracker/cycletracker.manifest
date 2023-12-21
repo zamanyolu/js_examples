@@ -1,14 +1,14 @@
 {
-  "name": "Hakan",
-  "short_name": "...",
-  "description": "...",
-  "start_url": "...",
-  "theme_color": "...",
-  "background_color": "...",
-  "display": "...",
+  "name": "cycleTracker: Period Tracking app",
+    "short_name": "CT",
+    "description": "Securely and confidentially track your menstrual cycle. Enter the start and end dates of your periods, saving your private data to your browser on your device, without sharing it with the rest of the world.",
+    "start_url": "/",
+    "theme_color": "#eeffee",
+    "background_color": "#eeffee",
+    "display": "standalone",
   "icons": [
     {
-      "src": "circle.ico",
+      "src": "icons/circle.ico",
       "sizes": "48x48"
     },
     {
