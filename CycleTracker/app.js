@@ -1,3 +1,6 @@
+/*
+https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Tutorials/CycleTracker/JavaScript_functionality#validate_user_input
+ */
 
 const newPeriodFormEl = document.getElementsByName("form")[0;
 const startDateInputEl = document.getElementById("start-date")
@@ -73,3 +76,39 @@ function getAllStoredPeriods(){
 
     return periods;
 }
+
+const pasPeriodContainer = document.getElementById("past-periods");
+
+function renderPastPeriods(){
+    const periods = getAllStoredPeriods();
+
+    //exit if there no periods
+    if(periods.length ===0){
+        return;
+    }
+    //clear the list of past periods to re-render it
+    pasPeriodContainer.innerHTML = "";
+
+    const pastPeriodHeader = document.createElement("h2");
+    pastPeriodHeader.textContent ="Past periods";
+
+    const pastPeriodLilst = document.createElement("ul");
+
+    periods.forEach((period) =>{
+        const periodEl = document.createElement("li");
+        periodEl.textContent = `From ${formatDate(period.startDate,
+            )} to ${formatDate(period.endDate)}`;
+        pastPeriodLilst.appendChild(periodEl);
+    });
+
+    pasPeriodContainer.appendChild(pastPeriodHeader);
+    pasPeriodContainer.appendChild(pastPeriodLilst);
+}
+
+function formatDate(dateString){
+    const date = new Date(dateString);
+
+    return date.toLocaleDateString("en-US",{timeZone: "UTC"});
+}
+
+renderPastPeriods();
