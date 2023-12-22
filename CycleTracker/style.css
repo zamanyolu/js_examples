@@ -1,6 +1,7 @@
 body {
-    margin: 10vh 10vw;
+    margin: 20vh 20vw;
     background-color: #efe;
+    min-width:300px;
 }
 
 ul,
@@ -8,8 +9,12 @@ fieldset,
 legend{
     border: 1px solid;
     background-color: #fff;
+    border-radius: 5px;
 }
 
+fieldset{
+    border-radius: 15px;
+}
 ul{
     padding:0;
     font-family: monospace;
